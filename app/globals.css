@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-bg font-body text-fg antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(240, 191, 85, 0.35);
+}
+
+:focus-visible {
+  outline: 2px solid #f0bf55;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+@layer components {
+  .eyebrow {
+    @apply flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.14em] text-sky;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-[22px] bg-sky;
+  }
+  .h2 {
+    @apply mt-3.5 font-display text-[clamp(28px,4.4vw,48px)] font-semibold leading-[1.08] tracking-[-0.02em];
+    text-wrap: balance;
+  }
+  .pill {
+    @apply inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line-2 px-3 py-1.5 font-mono text-xs;
+  }
+  .btn {
+    @apply inline-flex items-center gap-2.5 rounded-xl border border-line-2 bg-bg-2 px-[18px] py-3 text-sm font-semibold transition-colors hover:border-sky hover:bg-sky/10;
+  }
+  .btn-primary {
+    @apply border-fg bg-fg text-bg hover:border-gold hover:bg-gold;
+  }
+  .ptag {
+    @apply flex justify-between gap-2.5 font-mono text-[11px] uppercase tracking-[0.1em] text-dim;
+  }
+}
+
+/* BorderTrail: conic beam running around the card edge */
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.border-trail {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.border-trail::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0deg,
+    transparent 300deg,
+    var(--trail-a, #5ec4f0) 340deg,
+    #fff 352deg,
+    var(--trail-b, #f0bf55) 358deg,
+    transparent 360deg
+  );
+  animation: trail-spin var(--trail-duration, 5s) linear infinite;
+}
+@keyframes trail-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* Floating-label inputs */
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,
+.field textarea:not(:placeholder-shown) + label {
+  top: 6px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5ec4f0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.has-cursor,
+  body.has-cursor a,
+  body.has-cursor button,
+  body.has-cursor [role="button"] {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
